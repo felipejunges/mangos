@@ -1,0 +1,73 @@
+﻿@model Mangos.Mvc.Models.ViewModels.CategoriaDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro da categoria";
+}
+
+<form asp-action="Dados" method="post">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="GrupoId" />
+        <input type="hidden" asp-for="Hash" />
+
+        <div class="form-group row">
+            <label asp-for="Descricao" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-10">
+                <input asp-for="Descricao" class="form-control form-control-sm" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CategoriaSuperiorId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaSuperiorId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.CategoriasSuperiores, "Id", "Descricao", null))">
+                    <option value="">Nenhum</option>
+                </select>
+                <span asp-validation-for="CategoriaSuperiorId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="form-group form-check">
+                    <label class="form-check-label col-form-label-sm">
+                        <input class="form-check-input" asp-for="Receita" /> @Html.DisplayNameFor(model => model.Receita)
+                    </label>
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label col-form-label-sm">
+                        <input class="form-check-input" asp-for="Despesa" /> @Html.DisplayNameFor(model => model.Despesa)
+                    </label>
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label col-form-label-sm">
+                        <input class="form-check-input" asp-for="RelatorioTotal" /> @Html.DisplayNameFor(model => model.RelatorioTotal)
+                    </label>
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label col-form-label-sm">
+                        <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @if (Model.Id != 0)
+    {
+        if (Model.CategoriaTemFilhas)
+        {
+            <script type="text/javascript">
+                jQuery('#CategoriaSuperiorId').prop('disabled', 'disabled');
+            </script>
+        }
+    }
+}

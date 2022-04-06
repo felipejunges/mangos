@@ -1,0 +1,111 @@
+﻿@model Mangos.Mvc.Models.ViewModels.PessoaDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro da pessoa";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.GrupoId)
+        @Html.HiddenFor(model => model.Hash)
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Telefone1" class="col-md-2 text-md-right col-form-label col-form-label-sm">Telefones</label>
+            <div class="col-md-10">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">1</span>
+                    </div>
+                    <input asp-for="Telefone1" class="form-control form-control-sm campoTelefone" />
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">2</span>
+                    </div>
+                    <input asp-for="Telefone2" class="form-control form-control-sm campoTelefone" />
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">3</span>
+                    </div>
+                    <input asp-for="Telefone3" class="form-control form-control-sm campoTelefone" />
+                </div>
+
+                <span asp-validation-for="Telefone1" class="text-danger"></span>
+                <span asp-validation-for="Telefone2" class="text-danger"></span>
+                <span asp-validation-for="Telefone3" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Site, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Site, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Site, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Tipo" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="Tipo" class="form-control form-control-sm">
+                    <option value="">Selecione</option>
+                    <option value="@(((int)TipoPessoa.Cliente).ToString())">@(TipoPessoa.Cliente.GetDescription())</option>
+                    <option value="@(((int)TipoPessoa.Fornecedor).ToString())">@(TipoPessoa.Fornecedor.GetDescription())</option>
+                    <option value="@(((int)TipoPessoa.Ambos).ToString())">@(TipoPessoa.Ambos.GetDescription())</option>
+                </select>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CategoriaPadraoReceitaId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaPadraoReceitaId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.CategoriasReceita, "Id", "Descricao", null))">
+                    <option value="">Nenhuma</option>
+                </select>
+                <span asp-validation-for="CategoriaPadraoReceitaId" class="text-danger"></span>
+            </div>
+
+            <label asp-for="CategoriaPadraoDespesaId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaPadraoDespesaId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.CategoriasDespesa, "Id", "Descricao", null))">
+                    <option value="">Nenhuma</option>
+                </select>
+                <span asp-validation-for="CategoriaPadraoDespesaId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Ativo)
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Ativo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}

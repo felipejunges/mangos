@@ -1,0 +1,142 @@
+﻿@model Mangos.Mvc.Models.ViewModels.GrupoDetalhesModel
+
+@{
+    ViewData["Title"] = "Detalhes do grupo";
+}
+
+<div class="p-2">
+    <h4>@ViewData["Title"]</h4>
+</div>
+
+<div class="card">
+    <h5 class="card-header">Cadastros vinculados ao grupo</h5>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Descricao)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Descricao)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Pessoas)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Pessoas)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Usuarios)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Usuarios)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Categorias)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Categorias)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.ContasBancarias)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.ContasBancarias)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.CartoesCredito)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.CartoesCredito)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Receitas)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Receitas)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.Despesas)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.Despesas)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.LancamentosCartao)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.LancamentosCartao)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.TransferenciasConta)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.TransferenciasConta)
+            </dd>
+
+            <dt class="col-md-3 text-md-right">
+                @Html.DisplayNameFor(model => model.LancamentosFixos)
+            </dt>
+            <dd class="col-md-9">
+                @Html.DisplayFor(model => model.LancamentosFixos)
+            </dd>
+        </dl>
+
+        <div>
+            <a href="@Url.Content("~/Grupo")" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 p-2 offset-md-3">
+    <div class="card">
+        <h5 class="card-header">Excluir grupo</h5>
+        <div class="card-body">
+
+            @if (ViewData.ModelState.Any(x => x.Value != null && x.Value.Errors.Any()))
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erro na exclusão</strong>
+
+                    @foreach (var modelError in Html.ViewData.ModelState.SelectMany(keyValuePair => keyValuePair.Value!.Errors))
+                    {
+                        <br />@modelError.ErrorMessage
+                    }
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            <div class="form-group form-check form-control-sm">
+                <input type="checkbox" class="form-check-input" id="confirmacaoExclusaoGrupo">
+                <label class="form-check-label" for="confirmacaoExclusaoGrupo">Excluir grupo e todos os seus dados relacionados</label>
+            </div>
+
+            <div>
+                <a href="@Url.Content("~/Grupo/Excluir/"+ Model.Id)" class="btn btn-danger disabled" id="buttonExcluirGrupo" glyph-icon="trash" role="button">Excluir</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        jQuery('#confirmacaoExclusaoGrupo').on('change', function () {
+            if (jQuery('#confirmacaoExclusaoGrupo').is(':checked')) {
+                jQuery('#buttonExcluirGrupo').removeClass('disabled');
+            } else {
+                jQuery('#buttonExcluirGrupo').addClass('disabled');
+            }
+        });
+    </script>
+}

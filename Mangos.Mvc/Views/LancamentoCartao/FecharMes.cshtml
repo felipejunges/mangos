@@ -1,0 +1,75 @@
+﻿@model Mangos.Mvc.Models.ViewModels.FechamentoMesCartaoModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Fechar mês do cartão";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(o => o.GrupoId)
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @Html.Label("CartaoCreditoId", "Cartão de crédito", new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-6">
+                @Html.DropDownList("CartaoCreditoId", ViewData["CartoesCreditoLista"] as SelectList, "Selecione", new { @class = "form-control form-control-sm" })
+                @Html.ValidationMessage("CartaoCreditoId", "", new { @class = "text-danger" })
+            </div>
+
+            @Html.Label("MesReferencia", "Mês referência", htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.TextBox("MesReferencia", ViewData["MesReferencia"], new { @class = "form-control form-control-sm campoMesAno" })
+                @Html.ValidationMessage("MesReferencia", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.Label("CategoriaId", "Categoria", new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                @Html.DropDownList("CategoriaId", ViewData["CategoriasLista"] as SelectList, "Nenhum", new { @class = "form-control form-control-sm" })
+                @Html.ValidationMessage("CategoriaId", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.GerarLancamento)
+                        @Html.DisplayNameFor(model => model.GerarLancamento)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.GerarLancamento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#CartaoCreditoId').on('change', function (e) {
+
+                if (jQuery(this).val() != "") {
+                    var url = fullUrl + "CartaoCredito/GetDadosParaFechamento/" + jQuery(this).val();
+
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        success: function (data) {
+                            jQuery("#CategoriaId").val(data.categoriaId);
+                            jQuery('#MesReferencia').val(data.dataFechamento);
+                            jQuery('#GerarLancamento').attr('checked', data.gerarLancamento)
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+}

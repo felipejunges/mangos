@@ -1,0 +1,93 @@
+﻿@model Mangos.Mvc.Models.GerenciarConta.GerenciarDadosCadastraisModel
+
+@{
+    ViewData["SubTitle"] = "Dados cadastrais do usuário";
+    Layout = "~/Views/GerenciarConta/_LayoutGerenciar.cshtml";
+}
+
+<div class="card">
+    <h5 class="card-header">@ViewData["SubTitle"]</h5>
+    <div class="card-body">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(o => o.Id)
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.ConfirmeEmail, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.ConfirmeEmail, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.ConfirmeEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="offset-md-3 col-md-9">
+                        <label class="col-form-label-sm">
+                            <br>* Deixe os campos abaixo em branco para não alterar a senha atual:
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.SenhaAtual, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.SenhaAtual, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.SenhaAtual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.NovaSenha, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NovaSenha, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.NovaSenha, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.ConfirmeNovaSenha, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.ConfirmeNovaSenha, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.ConfirmeNovaSenha, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="offset-md-3 col-md-9">
+                        <input type="submit" value="Gravar" class="btn btn-primary btn-sm" /> ou @Html.ActionLink("Voltar", "Index", "Home")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.Sucesso)
+{
+    @section scripts_gerenciar {
+        <script type="text/javascript">
+            mensagemTopo(true, 'Os dados de usuário foram alterados com sucesso.');
+        </script>
+    }
+}

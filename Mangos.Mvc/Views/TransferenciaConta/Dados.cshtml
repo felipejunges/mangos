@@ -1,0 +1,66 @@
+﻿@model Mangos.Mvc.Models.ViewModels.TransferenciaContaDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro da transferência entre contas";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.GrupoId)
+        @Html.HiddenFor(model => model.Hash)
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control form-control-sm campoValor" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.ContaBancariaOrigemId, new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                <select asp-for="ContaBancariaOrigemId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.ContasBancariasOrigem, "Id", "Descricao", null))">
+                    <option value="">Nenhum</option>
+                </select>
+                <span asp-validation-for="ContaBancariaOrigemId" class="text-danger"></span>
+            </div>
+
+            @Html.LabelFor(model => model.DataDebito, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DataDebito, new { htmlAttributes = new { @class = "form-control form-control-sm campoData" } })
+                @Html.ValidationMessageFor(model => model.DataDebito, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.ContaBancariaDestinoId, new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                <select asp-for="ContaBancariaDestinoId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.ContasBancariasDestino, "Id", "Descricao", null))">
+                    <option value="">Nenhum</option>
+                </select>
+                <span asp-validation-for="ContaBancariaDestinoId" class="text-danger"></span>
+            </div>
+
+            @Html.LabelFor(model => model.DataCredito, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DataCredito, new { htmlAttributes = new { @class = "form-control form-control-sm campoData" } })
+                @Html.ValidationMessageFor(model => model.DataCredito, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}

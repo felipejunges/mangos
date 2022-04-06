@@ -1,0 +1,90 @@
+﻿@model Mangos.Mvc.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/login.css" />
+}
+
+<main class="login-form">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Login do Mangos</div>
+                    <div class="card-body">
+                        <form id="formLogin" method="POST" action="@Url.Content("~/Login/Login?ReturnUrl=" + (ViewData["ReturnUrl"] != null ? System.Web.HttpUtility.UrlEncode(ViewData["ReturnUrl"]!.ToString()) : ""))">
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group row">
+                                <label for="Email" class="col-md-4 col-form-label text-md-right">@Html.DisplayNameFor(o => o.Email)</label>
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-6">
+                                    <input type="text" id="Email" name="Email" class="form-control" value="@(Model != null ? Model.Email : string.Empty)" required autofocus>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Senha" class="col-md-4 col-form-label text-md-right">@Html.DisplayNameFor(o => o.Senha)</label>
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-6">
+                                    <input type="password" id="Senha" name="Senha" class="form-control" value="@(Model != null ? Model.Senha : string.Empty)" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6 offset-md-4">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="LembrarMe" id="LembrarMe" value="true" @(Model != null && Model.LembrarMe ? "checked" : "")> @Html.DisplayNameFor(o => o.LembrarMe)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (ViewData.ModelState.Any(x => x.Value!.Errors.Any()))
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="div-erro">
+                                    <strong>Erro de login</strong>
+
+                                    @foreach (var modelError in Html.ViewData.ModelState.SelectMany(keyValuePair => keyValuePair.Value!.Errors))
+                                    {
+                                        <br />@modelError.ErrorMessage
+                                    }
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Logar
+                                </button>
+
+                                <a href="@Url.Content("~/Login/EsqueciSenha")" class="btn btn-link btn-sm">Esqueci a senha</a>
+                            </div>
+                        </form>
+
+                        <hr />
+
+                        <div class="text-right">
+                            <a href="@Url.Content("~/Login/Registro")" class="btn btn-link btn-sm">Cadastrar conta</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section scripts {
+    <script type="text/javascript">
+        $('#formLogin').on('submit', function () {
+            $(this).find('button[type="submit"]').attr('disabled', true);
+            $(this).find('button[type="submit"]').html('Aguarde...');
+            $('#div-erro').hide();
+        });
+    </script>
+}

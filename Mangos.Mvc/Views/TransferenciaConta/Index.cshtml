@@ -1,0 +1,60 @@
+﻿@model Mangos.Mvc.Models.ViewModels.TransferenciaContaIndexModel
+
+@{
+    ViewData["Title"] = "Cadastro de transferências entre contas";
+}
+
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+    <div class="p-2 bd-highlight margin-auto">
+        <div class="btn-group bootstrap-navbar-btn-group">
+            <open-modal-button controller="TransferenciaConta" action="Dados" value="0" class="btn btn-sm btn-info" glyph-icon="plus-square">Incluir</open-modal-button>
+        </div>
+    </div>
+</div>
+
+<nav class="borda-conteudo">
+    <div class="titulo-filtro">
+        <span class="fa fa-search" aria-hidden="true"></span> Pesquisa
+    </div>
+
+    <form asp-action="IndexLista" asp-controller="TransferenciaConta" id="form-busca" method="get" data-ajax="true" data-ajax-update="#listaAjax" class="navbar-form navbar-left">
+        <div class="form-group row">
+            <label for="Busca_Descricao" class="col-md-1 text-md-right col-form-label col-form-label-sm">Descrição</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm" placeholder="Descrição" id="Busca_Descricao" name="Descricao">
+            </div>
+        </div>
+
+        <div class="form-group row group-busca-padrao">
+            <label for="Busca_Data" class="col-md-1 text-md-right col-form-label col-form-label-sm">Data</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control form-control-sm campoMesAno" placeholder="Data final" name="data" id="Busca_Data" value="@Model.Data">
+            </div>
+        </div>
+
+        <div class="form-group row group-busca-avancada">
+            <label for="Busca_DataInicial" class="col-md-1 text-md-right col-form-label col-form-label-sm">Período</label>
+            <div class="input-daterange input-group input-group-sm col-md-3">
+                <input type="text" class="form-control form-control-sm campoData" name="dataInicial" id="Busca_DataInicial" value="@Model.DataInicial" />
+                <div class="input-group-append input-group-prepend">
+                    <span class="input-group-text">até</span>
+                </div>
+                <input type="text" class="form-control form-control-sm campoData" name="dataFinal" id="Busca_DataFinal" value="@Model.DataFinal" />
+            </div>
+        </div>
+
+        <div class="form-group offset-md-1">
+            <input type="hidden" name="tipoBusca" id="TipoBusca" value="S" />
+
+            <button type="submit" class="btn btn-info btn-sm" glyph-icon="search">Procurar</button>
+            <button type="button" id="btnFiltroSimplesAvancado" class="btn btn-link btn-sm ">[+] Filtro avançado</button>
+        </div>
+    </form>
+</nav>
+
+<div id="listaAjax" class="borda-conteudo">
+    @await Html.PartialAsync("IndexLista", Model.Itens)
+</div>

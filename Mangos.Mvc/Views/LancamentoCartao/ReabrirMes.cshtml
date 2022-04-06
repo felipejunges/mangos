@@ -1,0 +1,53 @@
+﻿@model Mangos.Mvc.Models.ViewModels.ReaberturaMesCartaoModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Rearbrir mês do cartão";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(o => o.GrupoId)
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @Html.Label("CartaoCreditoId", "Cartão de crédito", new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-6">
+                @Html.DropDownList("CartaoCreditoId", ViewData["CartoesCreditoLista"] as SelectList, "Selecione", new { @class = "form-control form-control-sm" })
+                @Html.ValidationMessage("CartaoCreditoId", "", new { @class = "text-danger" })
+            </div>
+
+            @Html.Label("MesReferencia", "Mês vencimento", htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.TextBox("MesReferencia", ViewData["MesReferencia"], new { @class = "form-control form-control-sm campoMesAno" })
+                @Html.ValidationMessage("MesReferencia", "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#CartaoCreditoId').on('change', function (e) {
+
+                if (jQuery(this).val() != "") {
+                    var url = fullUrl + "CartaoCredito/GetDadosParaReabertura/" + jQuery(this).val();
+
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        success: function (data) {
+                            jQuery('#MesReferencia').val(data.dataFechamento);
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+}

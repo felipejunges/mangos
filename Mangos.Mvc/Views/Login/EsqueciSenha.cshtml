@@ -1,0 +1,74 @@
+﻿@model Mangos.Mvc.Models.ViewModels.EsqueciSenhaModel
+
+@{
+    ViewData["Title"] = "Esqueci minha senha";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/login.css" />
+}
+
+<main class="login-form">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Recuperação da senha</div>
+                    <div class="card-body">
+                        <form id="formEsqueciSenha" method="POST" action="@Url.Content("~/Login/EsqueciSenha")" novalidate="novalidate">
+                            @Html.AntiForgeryToken()
+
+                            @if (ViewData["MensagemRetorno"] != null)
+                            {
+                                <div class="alert alert-success" role="alert">
+                                    <strong>Sucesso!</strong>
+                                    <br />@ViewData["MensagemRetorno"]
+                                </div>
+                            }
+
+                            @if (ViewData.ModelState.Any(x => x.Value!.Errors.Any()))
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="div-erro">
+                                    <strong>Erro na recuperação da senha</strong>
+
+                                    @foreach (var modelError in Html.ViewData.ModelState.SelectMany(keyValuePair => keyValuePair.Value!.Errors))
+                                    {
+                                        <br />@modelError.ErrorMessage
+                                    }
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+
+                            @if (Convert.ToBoolean(ViewData["FormLiberado"]))
+                            {
+                                <div class="form-group">
+                                    <label for="Email" class="control-label">@Html.DisplayNameFor(o => o.Email)</label>
+                                    <input type="text" class="form-control" id="Email" name="Email" value="@(Model != null ? Model.Email : "")" required="" title="Informe seu e-mail" placeholder="exemplo@gmail.com" autofocus>
+                                    <span class="help-block"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enviar</button> <text>ou @Html.ActionLink("Voltar", "Login", "Login")</text>
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Voltar", "Login", "Login")
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section scripts {
+    <script type="text/javascript">
+        $('#formEsqueciSenha').on('submit', function () {
+            $(this).find('button[type="submit"]').attr('disabled', true);
+            $(this).find('button[type="submit"]').html('Aguarde...');
+            $('#div-erro').hide();
+        });
+    </script>
+}

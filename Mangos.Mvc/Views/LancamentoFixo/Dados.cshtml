@@ -1,0 +1,209 @@
+﻿@model Mangos.Mvc.Models.ViewModels.LancamentoFixoDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro do lançamento fixo";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.GrupoId)
+    @Html.HiddenFor(model => model.Hash)
+    @Html.HiddenFor(model => model.PessoaId)
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Tipo, Mangos.Dominio.Enums.TipoLancamentoFixo.Receita, new { @id = "Tipo_Receita" })
+                    <label class="form-check-label col-form-label-sm" for="Tipo_Receita">
+                        @TipoLancamentoFixo.Receita.GetDescription()
+                    </label>
+                </div>
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Tipo, Mangos.Dominio.Enums.TipoLancamentoFixo.Despesa, new { @id = "Tipo_Despesa" })
+                    <label class="form-check-label col-form-label-sm" for="Tipo_Despesa">
+                        @TipoLancamentoFixo.Despesa.GetDescription()
+                    </label>
+                </div>
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Tipo, Mangos.Dominio.Enums.TipoLancamentoFixo.ReceitaCartao, new { @id = "Tipo_ReceitaCartao" })
+                    <label class="form-check-label col-form-label-sm" for="Tipo_ReceitaCartao">
+                        @TipoLancamentoFixo.ReceitaCartao.GetDescription()
+                    </label>
+                </div>
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Tipo, Mangos.Dominio.Enums.TipoLancamentoFixo.DebitoCartao, new { @id = "Tipo_DebitoCartao" })
+                    <label class="form-check-label col-form-label-sm" for="Tipo_DebitoCartao">
+                        @TipoLancamentoFixo.DebitoCartao.GetDescription()
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.Periodicidade, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Periodicidade, Mangos.Dominio.Enums.PeriodicidadeLancamentoFixo.Mensal, new { @id = "Periodicidade_Mensal" })
+                    <label class="form-check-label col-form-label-sm" for="Periodicidade_Mensal">
+                        @PeriodicidadeLancamentoFixo.Mensal.GetDescription()
+                    </label>
+                </div>
+                <div class="radio">
+                    @Html.RadioButtonFor(model => model.Periodicidade, Mangos.Dominio.Enums.PeriodicidadeLancamentoFixo.Anual, new { @id = "Periodicidade_Anual" })
+                    <label class="form-check-label col-form-label-sm" for="Periodicidade_Anual">
+                        @PeriodicidadeLancamentoFixo.Anual.GetDescription()
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(model => model.Periodicidade, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CartaoCreditoId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CartaoCreditoId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.CartoesCredito, "Id", "Descricao", null))">
+                    <option value="">Nenhum</option>
+                </select>
+                <span asp-validation-for="CartaoCreditoId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control form-control-sm campoValor" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.DiaVencimento, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.DiaVencimento, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.DiaVencimento, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.MesVencimento, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.MesVencimento, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.MesVencimento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.Label("Pessoa", "Pessoa", new { @for = "ProcuraPessoa", @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Pessoa, new { htmlAttributes = new { id = "ProcuraPessoa", @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.PessoaId, "", new { @class = "text-danger" })
+            </div>
+
+            <label asp-for="CategoriaId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.Categorias, "Id", "DescricaoComSuperior", null))">
+                    <option value="">Nenhuma</option>
+                </select>
+                <span asp-validation-for="CategoriaId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="DataUltimoMesGerado" class="offset-md-8 col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-2">
+                <input asp-for="DataUltimoMesGerado" class="form-control form-control-sm campoMesAno" />
+                <span asp-validation-for="DataUltimoMesGerado" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Ativo)
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Ativo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#Tipo_Receita').on('click', function (e) {
+                jQuery('#CartaoCreditoId').prop('disabled', true);
+            });
+            jQuery('#Tipo_Despesa').on('click', function (e) {
+                jQuery('#CartaoCreditoId').prop('disabled', true);
+            });
+            jQuery('#Tipo_ReceitaCartao').on('click', function (e) {
+                jQuery('#CartaoCreditoId').prop('disabled', false);
+            });
+            jQuery('#Tipo_DebitoCartao').on('click', function (e) {
+                jQuery('#CartaoCreditoId').prop('disabled', false);
+            });
+            jQuery('#Periodicidade_Mensal').on('click', function (e) {
+                jQuery('#MesVencimento').prop('disabled', true);
+            });
+            jQuery('#Periodicidade_Anual').on('click', function (e) {
+                jQuery('#MesVencimento').prop('disabled', false);
+            });
+
+            @if (Model.Tipo == Mangos.Dominio.Enums.TipoLancamentoFixo.Receita || Model.Tipo == Mangos.Dominio.Enums.TipoLancamentoFixo.Despesa)
+            {
+                <text>jQuery('#CartaoCreditoId').prop('disabled', true);</text>
+            }
+
+            @if (Model.Periodicidade == Mangos.Dominio.Enums.PeriodicidadeLancamentoFixo.Mensal)
+            {
+                <text>jQuery('#MesVencimento').prop('disabled', true);</text>
+            }
+            else if(Model.Periodicidade == Mangos.Dominio.Enums.PeriodicidadeLancamentoFixo.Mensal)
+            {
+                <text>jQuery('#MesVencimento').prop('disabled', false);</text>
+            }
+
+            //
+            var url = fullUrl + "Pessoa/BuscaPessoas";
+
+            jQuery('#ProcuraPessoa').autocomplete({
+                serviceUrl: url,
+                paramName: 'busca',
+                minChars: 3,
+                lookupLimit: 20,
+                deferRequestBy: 250,
+                zIndex: 10001,
+                params: { tipo: 'T' },
+                showNoSuggestionNotice: true,
+                noSuggestionNotice: 'Nenhum resultado encontrado',
+                onSelect: function (suggestion) {
+                    $('#PessoaId').val(suggestion.data.pessoaId);
+
+                    if (suggestion.data.categoriaId != null && $("#CategoriaId:has(option[value='" + suggestion.data.categoriaId + "'])").length > 0)
+                        $('#CategoriaId').val(suggestion.data.categoriaId);
+                },
+                onInvalidateSelection: function () {
+                    $('#PessoaId').val('');
+                },
+                onHide: function (container) {
+                    if ($('#PessoaId').val() == '')
+                        jQuery('#ProcuraPessoa').val('');
+                }
+            });
+        });
+    </script>
+}

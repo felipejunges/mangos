@@ -1,0 +1,63 @@
+﻿@model Mangos.Mvc.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+}
+
+<div class="col-md-12 p-2 hidden-md">
+    <p class="text-center">
+        <a href="@Url.Content("~/DespesaRapida/Incluir")" class="btn btn-lg btn-primary" glyph-icon="money-bill-alt">Cadastrar despesa rápida</a>
+    </p>
+
+    <p class="text-center">
+        <a href="@Url.Content("~/Geo/MapaFornecedores")" class="btn btn-lg btn-primary" glyph-icon="map">Mapa de fornecedores</a>
+    </p>
+</div>
+
+<div class="container dash">
+    <div class="row row-pd-7 card-home">
+        <div class="col-md-6 col-pd-7 mt-3">
+            <div class="card">
+                <div class="card-header">
+                    Resultado por mês
+                </div>
+                <div class="card-body">
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-pd-7 mt-3">
+            <div class="card">
+                <div class="card-header">Saldos de conta</div>
+                <div class="card-body">
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 offset-md-6 col-pd-7 mt-3">
+            <div class="card">
+                <div class="card-header">Total por categoria</div>
+                <div class="card-body">
+                    <canvas id="chart3"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/chartjs/Chart.min.js"></script>
+    <script type="text/javascript" src="~/lib/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
+    <script type="text/javascript">
+        @Html.Raw(Model.Chart1.CreateChartCode("chart1"));
+        @Html.Raw(Model.Chart2.CreateChartCode("chart2"));
+        @Html.Raw(Model.Chart3.CreateChartCode("chart3"));
+    </script>
+}

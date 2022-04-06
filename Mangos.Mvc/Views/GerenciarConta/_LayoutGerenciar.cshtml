@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Gerenciar conta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var action = @ViewContext.RouteData.Values["action"]!.ToString();
+}
+
+<div class="row">
+    <div class="col-12 p-2">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+
+    <div class="col-md-3 pb-2 pb-md-0">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link @(action == "DadosCadastrais" ? "active" : "")" asp-action="DadosCadastrais">Dados cadastrais</a>
+            <a class="nav-link @(action == "AlertasVencimentos" ? "active" : "")" asp-action="AlertasVencimentos">Alertas de vencimentos</a>
+            <a class="nav-link @(action == "ConfiguracoesGrupo" ? "active" : "")" asp-action="ConfiguracoesGrupo">Configurações do grupo</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="tab-content">
+            <div class="tab-pane show active">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @RenderSection("scripts_gerenciar", required: false)
+}

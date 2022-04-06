@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.LancamentoListaModel>
+
+@{
+    DateTime dataAlertaVencimentos = Convert.ToDateTime(ViewData["DataAlertaVencimentos"]);
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataVencimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataPagamento)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th></th>
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class="text-center">Nenhum resultado encontrado</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pessoa)
+                    </td>
+                    <td style="@(!item.Pago && item.DataVencimento < DateTime.Now.Date ? "color: red; font-weight: bold;" : !item.Pago && item.DataVencimento <= dataAlertaVencimentos ? "font-weight: bold;" : "")">
+                        @Html.DisplayFor(modelItem => item.DataVencimento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataPagamento)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td class="text-right">
+                        @if (!item.Pago)
+                        {
+                            <open-modal-icon controller="Receita" action="Pagar" value="@item.Id.ToString()" glyph-icon="dollar-sign"></open-modal-icon>
+                        }
+
+                        <open-modal-icon controller="Receita" action="Editar" value="@item.Id.ToString()" glyph-icon="edit"></open-modal-icon>
+                        <excluir-icon controller="Receita" value="@item.Id.ToString()"></excluir-icon>
+                    </td>
+                </tr>
+            }
+        }
+
+        <tr class="table-footer">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right">@Model.Sum(o => o.Valor).ToString("c2")</td>
+            <td></td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.LancamentoListaModel>
+
+@{
+    ViewData["Title"] = "Cadastro de despesas";
+}
+
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+    <div class="p-2 bd-highlight margin-auto">
+        <div class="btn-group bootstrap-navbar-btn-group">
+            @{
+                var opcoes = new DropdownOption[] {
+                    new DropdownOption("Incluir completa", "Despesa", "Incluir", "0"),
+                    new DropdownOption("Incluir", "Despesa", "IncluirPaga", "0")
+                };
+            }
+
+            <open-modal-button controller="Despesa" action="IncluirPaga" value="0" class="btn btn-sm btn-info" glyph-icon="plus-square">Incluir</open-modal-button>
+            <open-modal-dropdown opcoes="@opcoes" class="btn btn-sm btn-info"></open-modal-dropdown>
+        </div>
+    </div>
+</div>
+
+<nav class="borda-conteudo">
+    <div class="titulo-filtro">
+        <span class="fa fa-search" aria-hidden="true"></span> Pesquisa
+    </div>
+
+    <form asp-action="IndexLista" asp-controller="Despesa" id="form-busca" method="get" data-ajax="true" data-ajax-update="#listaAjax" class="navbar-form navbar-left">
+
+        <div class="form-group row">
+            <label for="Busca_Descricao" class="col-md-1 text-md-right col-form-label col-form-label-sm">Descrição</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control form-control-sm" placeholder="Descrição" id="Busca_Descricao" name="Descricao">
+            </div>
+
+            <label for="Busca_Pesquisa" class="col-md-1 text-md-right col-form-label col-form-label-sm">Pesquisa</label>
+            <div class="col-md-5">
+                <div class="input-group">
+                    @Html.DropDownList("tipoPesquisa", new List<SelectListItem>()
+                        {
+                            new SelectListItem(){ Text= "Pessoa", Value = "P"},
+                            new SelectListItem(){ Text= "Categoria", Value = "C"},
+                            new SelectListItem(){ Text= "Conta bancária", Value = "O"}
+                        }, new { @class = "form-control form-control-sm col-md-4", @id = "Busca_TipoPesquisa" })
+                    <input type="text" class="form-control form-control-sm" placeholder="Pessoa" name="pesquisa" id="Busca_Pesquisa">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row group-busca-padrao">
+            <label for="Busca_Mes" class="col-md-1 text-md-right col-form-label col-form-label-sm">Período</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control form-control-sm campoMesAno" placeholder="Período" name="mes" id="Busca_Mes" value="@ViewData["Mes"]">
+            </div>
+        </div>
+
+        <div class="form-group row group-busca-avancada">
+            <label for="Busca_DataInicial" class="col-md-1 text-md-right col-form-label col-form-label-sm">Período</label>
+            <div class="input-daterange input-group input-group-sm col-md-3">
+                <input type="text" class="form-control form-control-sm campoData" name="dataInicial" id="Busca_DataInicial" value="@ViewData["DataInicial"]" />
+                <div class="input-group-append input-group-prepend">
+                    <span class="input-group-text">até</span>
+                </div>
+                <input type="text" class="form-control form-control-sm campoData" name="dataFinal" value="@ViewData["DataFinal"]" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="Busca_TipoData" class="col-md-1 text-md-right col-form-label col-form-label-sm">Tipo busca</label>
+            <div class="col-md-3">
+                <select id="Busca_TipoData" name="tipoData" class="form-control form-control-sm">
+                    <option value="@LancamentoTipoDataPesquisa.Vencimento">@LancamentoTipoDataPesquisa.Vencimento.GetDescription()</option>
+                    <option value="@LancamentoTipoDataPesquisa.Pagamento">@LancamentoTipoDataPesquisa.Pagamento.GetDescription()</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group offset-md-1">
+            <input type="hidden" name="tipoBusca" id="TipoBusca" value="S" />
+
+            <button type="submit" class="btn btn-info btn-sm" glyph-icon="search">Procurar</button>
+            <button type="button" id="btnFiltroSimplesAvancado" class="btn btn-link btn-sm ">[+] Filtro avançado</button>
+        </div>
+    </form>
+</nav>
+
+<div id="listaAjax" class="borda-conteudo">
+    @await Html.PartialAsync("IndexLista", Model)
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        jQuery('#Busca_TipoPesquisa').on('change', function (e) {
+            jQuery('#Busca_Pesquisa').attr('placeholder', jQuery('#Busca_TipoPesquisa option:selected').text());
+        });
+    </script>
+}

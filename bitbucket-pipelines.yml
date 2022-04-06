@@ -1,0 +1,54 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+pipelines:
+  deployment: production
+  branches:
+    master:
+      - step:
+          name: Deploy Mangos.Mvc
+          script:
+            - apk update
+            - apk add lftp
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mv /httpdocs/app_not_offline.htm /httpdocs/app_offline.htm; quit"
+            - dotnet restore
+            #- dotnet publish -c Release -o ./publish --self-contained true -r win10-x64 Mangos.Mvc/Mangos.Mvc.csproj -p:Version=2.21.0.$BITBUCKET_BUILD_NUMBER
+            - dotnet publish -c Release -o ./publish --self-contained false Mangos.Mvc/Mangos.Mvc.csproj -p:Version=2.21.0.$BITBUCKET_BUILD_NUMBER
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mirror -v -R -p publish /httpdocs; quit"
+          after-script:
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mv /httpdocs/app_offline.htm /httpdocs/app_not_offline.htm; quit"
+          condition:
+              changesets:
+                 includePaths:
+                   - "Mangos.Mvc/**"
+                   - "Mangos.Dominio/**"
+                   - "Mangos.Infra/**"
+                   - "Mangos.Logger/**"
+                   - bitbucket-pipelines.yml
+      - step:
+          name: Deploy Mangos.Api
+          script:
+            - apk update
+            - apk add lftp
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mv /api.mangos.inf.br/app_not_offline.htm /api.mangos.inf.br/app_offline.htm; quit"
+            - dotnet restore
+            #- dotnet publish -c Release -o ./publish --self-contained true -r win10-x64 Mangos.Api/Mangos.Api.csproj -p:Version=2.21.0.$BITBUCKET_BUILD_NUMBER
+            - dotnet publish -c Release -o ./publish --self-contained false Mangos.Api/Mangos.Api.csproj -p:Version=2.21.0.$BITBUCKET_BUILD_NUMBER
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mirror -v -R -p publish /api.mangos.inf.br; quit"
+          after-script:
+            - lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST -e "mv /api.mangos.inf.br/app_offline.htm /api.mangos.inf.br/app_not_offline.htm; quit"
+          condition:
+              changesets:
+                 includePaths:
+                   - "Mangos.Api/**"
+                   - "Mangos.Dominio/**"
+                   - "Mangos.Infra/**"
+                   - "Mangos.Logger/**"
+                   - bitbucket-pipelines.yml
+  custom:
+    manual:
+      - step:
+          name: Copy AppOffline
+          script:
+            - echo "Running..."
+          after-script:
+            - echo "after script has run!"

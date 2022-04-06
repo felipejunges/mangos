@@ -1,0 +1,115 @@
+@model IEnumerable<Mangos.Mvc.Models.ViewModels.PessoaGeoModel>
+
+@{
+    ViewData["Title"] = "Mapa de fornecedores";
+}
+
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+    <div class="p-2 bd-highlight margin-auto">
+        <div class="btn-group bootstrap-navbar-btn-group">
+            <a class="btn-sm btn-light btn" href="@Url.Content("~/Pessoa")" role="button">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<div id="listaAjax" class="borda-conteudo">
+    <div id="googleMap" style="width:100%;height:100px;"></div>
+</div>
+
+<div class="form-group form-check form-control-sm">
+    <input type="checkbox" class="form-check-input" id="recentralizarMapa" name="recentralizarMapa" value="true" checked="checked"  >
+    <label class="form-check-label col-form-label-sm" for="recentralizarMapa">Recentralizar mapa</label>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript" src="~/js/Location.js"></script>
+
+    <script type="text/javascript">
+        var map = null;
+        var currentMarker = null;
+
+        function buscaGeo() {
+            getPosition(100000, 10, false, function (position) {
+                if (map == null || currentMarker == null)
+                    initMap(position.coords.latitude, position.coords.longitude, 14);
+                else
+                    updateCurrentMarker(position.coords.latitude, position.coords.longitude)
+            });
+        }
+
+        function updateCurrentMarker(lat, long) {
+            // atualiza a posição do ponto
+            var position = new google.maps.LatLng(lat, long);
+            currentMarker.setPosition(position);
+
+            // recentraliza o mapa, se necessário
+            if ($('#recentralizarMapa').is(':checked')) {
+                if (!markerIsInBounds(currentMarker))
+                    map.panTo(position);
+            }
+        }
+
+        function markerIsInBounds(marker){
+            return map.getBounds().contains(marker.getPosition());
+        }
+
+        function initMap(lat, long, zoom) {
+            var googleMap = document.querySelector('#googleMap');
+            googleMap.style.height = (window.innerHeight - 180) +'px';
+
+            var styles = [{
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }];
+
+            var mapProp = {
+                center: new google.maps.LatLng(lat, long),
+                zoom: zoom,
+                disableDefaultUI: true,
+                styles: styles
+            };
+
+            // inicializa o mapa e o ponto central
+            map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            // cria o marcador de posição do GPS
+            currentMarker = new google.maps.Marker({
+                position: { lat: lat, lng: long },
+                map: map,
+                icon: '@Url.Content("~/images/gpspoint.png")',
+                zIndex: @Model.Count()
+            });
+
+            // pontos gerados pelo C#
+            @{
+                for(int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model.ElementAt(i);
+
+                    <text>
+                        var marker@(i) = new google.maps.Marker({
+                            position: { lat: @item.Latitude.ToString().Replace(',','.'), lng: @item.Longitude.ToString().Replace(',','.') },
+                            map: map,
+                            label: '@item.Nome.Substring(0, 1)',
+                            title: '<b>@item.Nome</b><br />@item.Observacao',
+                            zIndex: @i
+                        });
+
+                        marker@(i).addListener('click', function() {
+                            new google.maps.InfoWindow({ content: marker@(i).title }).open(map, marker@(i));
+                        });
+                    </text>
+                }
+            }
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB501JFX8BUIIyJTqMTOE1bz6dISInjLNE&callback=buscaGeo"></script>
+}

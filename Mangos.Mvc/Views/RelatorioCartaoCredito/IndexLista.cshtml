@@ -1,0 +1,104 @@
+﻿@model Mangos.Dominio.Models.Relatorios.RelatorioCartaoCreditoModel
+
+<div class="table-responsive">
+    <table class="table table-sm">
+        <tr class="thead-light">
+            @if (!Convert.ToBoolean(ViewData["AgruparCartoes"]))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Lancamentos.FirstOrDefault()!.CartaoCredito)
+                </th>
+            }
+
+            <th>
+                @Html.DisplayNameFor(model => model.Lancamentos.FirstOrDefault()!.MesReferencia)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Lancamentos.FirstOrDefault()!.ValorTotal)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Lancamentos)
+        {
+            <tr>
+                @if (!Convert.ToBoolean(ViewData["AgruparCartoes"]))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CartaoCredito)
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MesReferencia)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.ValorTotal)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td style="font-weight: bold;">Total</td>
+
+            @if (!Convert.ToBoolean(ViewData["AgruparCartoes"]))
+            {
+                <td></td>
+            }
+
+            <td class="text-right" style="font-weight: bold;">@Model.Lancamentos.Sum(s => s.ValorTotal).ToString("c2")</td>
+        </tr>
+    </table>
+
+    <hr />
+
+    <table class="table table-striped table-hover table-sm">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Limites.FirstOrDefault()!.CartaoCredito)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Limites.FirstOrDefault()!.ValorLimiteTotal)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Limites.FirstOrDefault()!.ValorLimiteUtilizado)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Limites.FirstOrDefault()!.PercentualLimiteUtilizado)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Limites.FirstOrDefault()!.ValorLimiteDisponivel)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Limites)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CartaoCredito)
+                </td>
+
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.ValorLimiteTotal)
+                </td>
+
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.ValorLimiteUtilizado)
+                </td>
+
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.PercentualLimiteUtilizado)%
+                </td>
+
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.ValorLimiteDisponivel)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td style="font-weight: bold;">Total</td>
+            <td class="text-right" style="font-weight: bold;">@Model.Limites.Sum(s => s.ValorLimiteTotal).ToString("c2")</td>
+            <td class="text-right" style="font-weight: bold;">@Model.Limites.Sum(s => s.ValorLimiteUtilizado).ToString("c2")</td>
+            <td class="text-right" style="font-weight: bold;"></td>
+            <td class="text-right" style="font-weight: bold;">@Model.Limites.Sum(s => s.ValorLimiteDisponivel).ToString("c2")</td>
+        </tr>
+    </table>
+</div>

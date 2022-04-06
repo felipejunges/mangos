@@ -1,0 +1,45 @@
+﻿@model Mangos.Mvc.Models.ViewModels.GrupoDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro do grupo";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+            @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="MesesAntecedenciaGerarLancamento" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-2">
+            <input asp-for="MesesAntecedenciaGerarLancamento" class="form-control form-control-sm" />
+            <span asp-validation-for="MesesAntecedenciaGerarLancamento" class="text-danger"></span>
+        </div>
+
+        <label asp-for="MesesAntecedenciaGerarLancamentoCartao" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-2">
+            <input asp-for="MesesAntecedenciaGerarLancamentoCartao" class="form-control form-control-sm" />
+            <span asp-validation-for="MesesAntecedenciaGerarLancamentoCartao" class="text-danger"></span>
+        </div>
+
+        <label asp-for="MesesGraficosDashboard" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-2">
+            <input asp-for="MesesGraficosDashboard" class="form-control form-control-sm" />
+            <span asp-validation-for="MesesGraficosDashboard" class="text-danger"></span>
+        </div>
+    </div>
+
+</div>
+}

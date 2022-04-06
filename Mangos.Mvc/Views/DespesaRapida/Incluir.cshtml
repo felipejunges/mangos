@@ -1,0 +1,136 @@
+﻿@model Mangos.Mvc.Models.ViewModels.DespesaRapidaViewModel
+
+@{
+    ViewData["Title"] = "Cadastro rápido de despesa";
+}
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="p-2">
+            <h4>@ViewData["Title"]</h4>
+        </div>
+
+        <div class="card">
+            <h5 class="card-header">Dados da despesa</h5>
+            <div class="card-body">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.HiddenFor(model => model.PessoaId)
+                    @Html.HiddenFor(model => model.Latitude)
+                    @Html.HiddenFor(model => model.Longitude)
+                    @Html.HiddenFor(model => model.PessoaCoordenadaIdAtualizar)
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group row">
+                            <label asp-for="Pessoa" class="col-md-2 text-md-right col-form-label"></label>
+                            <div class="col-md-10">
+                                <div class="input-group-append">
+                                    <input asp-for="Pessoa" type="text" class="form-control" id="ProcuraPessoa">
+                                    <button type="button" class="btn btn-secondary" onclick="buscarPessoaPeloGps()" glyph-icon="map-pin"></button>
+                                </div>
+                                <span asp-validation-for="Pessoa" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="Descricao" class="col-md-2 text-md-right col-form-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Descricao" type="text" class="form-control input-lg">
+                                <span asp-validation-for="Descricao" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="Valor" class="col-md-2 text-md-right col-form-label"></label>
+                            <div class="col-md-4">
+                                <input asp-for="Valor" class="form-control input-lg campoValor" pattern="[0-9.,]*" inputmode="numeric" />
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.ContaBancariaId, new { @class = "col-md-2 text-md-right col-form-label" })
+                            <div class="col-md-10">
+                                <select asp-for="ContaBancariaId" asp-items="@(new SelectList(Model.ContasBancarias, "Id", "Descricao"))" class="form-control input-lg">
+                                    <option value="">Nenhuma</option>
+                                </select>
+
+                                @Html.ValidationMessageFor(model => model.ContaBancariaId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="CartaoCreditoId" class="col-md-2 text-md-right col-form-label"></label>
+                            <div class="col-md-10">
+                                <select asp-for="CartaoCreditoId" asp-items="@(new SelectList(Model.CartoesCredito, "Id", "Descricao"))" class="form-control input-lg">
+                                    <option value="">Nenhum</option>
+                                </select>
+
+                                <span asp-validation-for="CartaoCreditoId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6 offset-md-2">
+                                <div class="checkbox">
+                                    <label class="col-form-label">
+                                        @Html.EditorFor(model => model.AtualizarCoordenadas)
+                                        @Html.DisplayNameFor(model => model.AtualizarCoordenadas)
+                                    </label>
+                                    @Html.ValidationMessageFor(model => model.AtualizarCoordenadas, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="offset-md-2 col-md-10">
+                                <input type="submit" value="Gravar" class="btn btn-primary" /> ou @Html.ActionLink("Voltar", "Index", "Despesa")
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @section Scripts {
+                    <script src="~/js/Location.js"></script>
+                    <script src="~/js/DespesaRapida.js"></script>
+
+                    <script>
+                        //
+                        var url = fullUrl + "Pessoa/BuscaPessoas";
+
+                        jQuery('#ProcuraPessoa').autocomplete({
+                            serviceUrl: url,
+                            paramName: 'busca',
+                            minChars: 3,
+                            lookupLimit: 20,
+                            deferRequestBy: 250,
+                            zIndex: 10001,
+                            params: { tipo: 'F' },
+                            showNoSuggestionNotice: true,
+                            noSuggestionNotice: 'Nenhum resultado encontrado',
+                            onSelect: function (suggestion) {
+                                $('#PessoaId').val(suggestion.data.pessoaId);
+
+                                if (suggestion.data.categoriaId != null && $("#CategoriaId:has(option[value='" + suggestion.data.categoriaId + "'])").length > 0)
+                                    $('#CategoriaId').val(suggestion.data.categoriaId);
+                            },
+                            onInvalidateSelection: function () {
+                                $('#PessoaId').val('');
+                            },
+                            onHide: function (container) {
+                                if ($('#PessoaId').val() == '')
+                                    jQuery('#ProcuraPessoa').val('');
+                            }
+                        });
+                    </script>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.CartaoCreditoListaModel>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.Ativo)
+            </th>
+            <th></th>
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center">Nenhum resultado encontrado</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr class="@(!item.Ativo ? "table-item-inativo" : "")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Categoria)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Ativo)
+                    </td>
+                    <td class="text-right">
+                        <open-modal-icon controller="CartaoCredito" action="Dados" value="@item.Id.ToString()" glyph-icon="edit"></open-modal-icon>
+                        <excluir-icon controller="CartaoCredito" value="@item.Id.ToString()"></excluir-icon>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>

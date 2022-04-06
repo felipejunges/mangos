@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Mangos.Dominio.Models.Relatorios.RelatorioProjecaoSaldoModel>
+
+@{ 
+    decimal somaValor = 0;
+    DateTime data = DateTime.MinValue;
+    string anoMes = DateTime.Now.ToString("yyyyMM");
+}
+
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <tr class="thead-light">
+                <th>
+                    @Html.DisplayNameFor(model => model.Data)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </th>
+                <th style="text-align: right;">
+                    @Html.DisplayNameFor(model => model.Valor)
+                </th>
+            </tr>
+
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="3" class="text-center">Nenhum resultado encontrado</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    string anoMesItem = item.Data.ToString("yyyyMM");
+
+                    if (anoMes != anoMesItem)
+                    {
+                        DateTime dataImprimir = item.Data.AddDays(item.Data.Day * -1);
+
+                        <tr>
+                            <td></td>
+                            <td style="font-weight: bold;">Total projetado em @(dataImprimir.ToString("dd/MM/yyyy"))</td>
+                            <td style="text-align: right; color: #0000AA;">@somaValor.ToString("c2")</td>
+                        </tr>
+
+                        anoMes = anoMesItem;
+                    }
+
+                    <tr>
+                        <td>
+                            @if (item.Data != data)
+                            {
+                                @Html.DisplayFor(modelItem => item.Data)
+                                data = item.Data;
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descricao)
+                        </td>
+                        <td style="text-align: right; color: @(item.TipoValor == Mangos.Dominio.Enums.TipoLancamento.Receita ? "#00AA00" : item.TipoValor == Mangos.Dominio.Enums.TipoLancamento.Despesa ? "#BB0000" : "");">
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        </td>
+                    </tr>
+
+                    somaValor += item.TipoValor == Mangos.Dominio.Enums.TipoLancamento.Receita ? item.Valor : item.TipoValor == Mangos.Dominio.Enums.TipoLancamento.Despesa ? item.Valor * -1 : 0M;
+                }
+            }
+
+            <tr>
+                <td></td>
+                <td style="font-weight: bold;">Total projetado em @(Convert.ToDateTime(ViewData["DataFinal"]).ToString("dd/MM/yyyy"))</td>
+                <td style="text-align: right; color: #0000AA;">@somaValor.ToString("c2")</td>
+            </tr>
+        </table>
+    </div>

@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190503231514_Criacao-Tabela-LogEventos.cs" />
+    <Compile Remove="Migrations\20190503231514_Criacao-Tabela-LogEventos.Designer.cs" />
+    <Compile Remove="Migrations\20190505123809_Criacao-Tabela-LogEventos.cs" />
+    <Compile Remove="Migrations\20190505123809_Criacao-Tabela-LogEventos.Designer.cs" />
+    <Compile Remove="Migrations\20190505124429_Criacao-Tabela-LogEventos.cs" />
+    <Compile Remove="Migrations\20190505124429_Criacao-Tabela-LogEventos.Designer.cs" />
+    <Compile Remove="Migrations\20190505125321_Criacao-Tabela-LogEventos.cs" />
+    <Compile Remove="Migrations\20190505125321_Criacao-Tabela-LogEventos.Designer.cs" />
+    <Compile Remove="Migrations\20190505200319_Limite-Cartao-Credito.cs" />
+    <Compile Remove="Migrations\20190505200319_Limite-Cartao-Credito.Designer.cs" />
+    <Compile Remove="Migrations\20190505212737_Limite-Cartao-Credito.cs" />
+    <Compile Remove="Migrations\20190505212737_Limite-Cartao-Credito.Designer.cs" />
+    <Compile Remove="Migrations\20190516000658_Datas-Transferencia-Conta.cs" />
+    <Compile Remove="Migrations\20190516000658_Datas-Transferencia-Conta.Designer.cs" />
+    <Compile Remove="Migrations\20190519234724_TipoLancamento-LancamentoCartao.cs" />
+    <Compile Remove="Migrations\20190519234724_TipoLancamento-LancamentoCartao.Designer.cs" />
+    <Compile Remove="Migrations\20190519235021_TipoLancamento-LancamentoCartao.cs" />
+    <Compile Remove="Migrations\20190519235021_TipoLancamento-LancamentoCartao.Designer.cs" />
+    <Compile Remove="Migrations\20190526001948_Tabela-RendimentoMensal-e-Remocao-Grupo-Saldo-Conta.cs" />
+    <Compile Remove="Migrations\20190526001948_Tabela-RendimentoMensal-e-Remocao-Grupo-Saldo-Conta.Designer.cs" />
+    <Compile Remove="Migrations\20190609003356_Valor-Conferencia-Saldo.cs" />
+    <Compile Remove="Migrations\20190609003356_Valor-Conferencia-Saldo.Designer.cs" />
+    <Compile Remove="Migrations\20190811215824_Sessao-Acesso-Usuario.cs" />
+    <Compile Remove="Migrations\20190811215824_Sessao-Acesso-Usuario.Designer.cs" />
+    <Compile Remove="Migrations\20190811220047_Sessao-Acesso-Usuario.cs" />
+    <Compile Remove="Migrations\20190811220047_Sessao-Acesso-Usuario.Designer.cs" />
+    <Compile Remove="Migrations\20190811220654_Sessao-Acesso-Usuario.cs" />
+    <Compile Remove="Migrations\20190811220654_Sessao-Acesso-Usuario.Designer.cs" />
+    <Compile Remove="Migrations\20190812003801_Sessao-Acesso-Usuario.cs" />
+    <Compile Remove="Migrations\20190812003801_Sessao-Acesso-Usuario.Designer.cs" />
+    <Compile Remove="Migrations\20190812004201_Sessao-Acesso-Usuario.cs" />
+    <Compile Remove="Migrations\20190812004201_Sessao-Acesso-Usuario.Designer.cs" />
+    <Compile Remove="Migrations\20191014021813_LancamentoCartao-MesReferencia.cs" />
+    <Compile Remove="Migrations\20191014021813_LancamentoCartao-MesReferencia.Designer.cs" />
+    <Compile Remove="Migrations\20200413024807_Senha-VO.cs" />
+    <Compile Remove="Migrations\20200413024807_Senha-VO.Designer.cs" />
+    <Compile Remove="Migrations\20200413024902_Senha-VO.cs" />
+    <Compile Remove="Migrations\20200413024902_Senha-VO.Designer.cs" />
+    <Compile Remove="Migrations\20200413025406_Senha-VO.cs" />
+    <Compile Remove="Migrations\20200413025406_Senha-VO.Designer.cs" />
+    <Compile Remove="Migrations\20200413025522_Senha-VO.cs" />
+    <Compile Remove="Migrations\20200413025522_Senha-VO.Designer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Mangos.Dominio\Mangos.Dominio.csproj" />
+  </ItemGroup>
+
+</Project>

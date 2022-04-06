@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mangos - @ViewData["Title"]</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+
+        <link rel="icon" href="@Url.Content("~/Images/favicon_local.png")" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+
+        <link rel="icon" href="@Url.Content("~/Images/favicon.png")" />
+    </environment>
+
+    <link rel="stylesheet" href="~/css/site.css" /> <!-- minification needed -->
+
+    @RenderSection("styles", required: false)
+
+    <script type="text/javascript">
+        var fullUrl = "@Url.Content("~/")";
+    </script>
+</head>
+<body>
+    <div id="loading" style="display: none;"><img src="@Url.Content("~/Images/hourglass.svg")" alt="Aguarde..." /><br />Processando...</div>
+    <div id="modal-principal" class="modal fade" role="dialog" tabindex="-1"></div>
+
+    @await Html.PartialAsync("_LoginPartial")
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <p class="alert alert-success alert-dismissible alert-topo" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+                <span id="mensagem-topo-texto"></span>
+            </p>
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <environment include="Development">
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="~/lib/jquery-mask/jquery.mask.js"></script>
+        <script type="text/javascript" src="~/lib/jquery-mask-money/jquery.maskMoney.js"></script>
+
+        <script type="text/javascript" src="~/lib/jquery-ajax-unobtrusive-master/jquery.unobtrusive-ajax.js"></script>
+
+        <script type="text/javascript" src="~/lib/popper-js/dist/umd/popper.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap/js/bootstrap.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="~/lib/jquery-mask/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="~/lib/jquery-mask-money/jquery.maskMoney.min.js"></script>
+
+        <script type="text/javascript" src="~/lib/jquery-ajax-unobtrusive-master/jquery.unobtrusive-ajax.min.js"></script>
+
+        <script type="text/javascript" src="~/lib/popper-js/dist/umd/popper.min.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    </environment>
+
+    <script type="text/javascript" src="~/js/site.js"></script> <!-- minification needed -->
+    <script type="text/javascript" src="~/lib/jquery-autocomplete/jquery.autocomplete.min.js"></script>
+
+    <script type="text/javascript" src="~/js/Mangos.js"></script>
+    <script type="text/javascript" src="~/js/Popup.js"></script>
+    <script type="text/javascript" src="~/js/FormBusca.js"></script>
+    <script type="text/javascript" src="~/js/Pagination.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        setaCamposMascaras();
+    </script>
+
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <script type="text/javascript">
+            function msToTime(duration) {
+                var seconds = parseInt((duration / 1000) % 60),
+                    minutes = parseInt((duration / (1000 * 60)) % 60),
+                    hours = parseInt((duration / (1000 * 60 * 60)) % 24),
+                    days = parseInt(duration / (1000 * 60 * 60 * 24));
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                return (days > 0 ? days + "d, " : '') + hours + ":" + minutes + ":" + seconds;// + "." + milliseconds;
+            }
+
+            //
+            //
+            // Data/hora servidor: @ViewData["DataHoraServidor"]
+            // Tempo SessionData: @ViewData["TempoSessionData"]
+            var tempoExpiracao = @ViewData["TempoExpiracao"];
+            var dataHoraExpiracao = new Date();
+            dataHoraExpiracao.setSeconds(dataHoraExpiracao.getSeconds() + tempoExpiracao);
+
+            document.querySelector('#lblTempoExpiracao').innerHTML = msToTime(tempoExpiracao * 1000);
+
+            localStorage.dataHoraLogout = dataHoraExpiracao;
+
+            var timerLogout = setInterval(function () {
+                var dataHoraLogout = Date.parse(localStorage.dataHoraLogout);
+                var dataHoraAgora = new Date();
+
+                document.querySelector('#lblTempoExpiracao').innerHTML = msToTime(dataHoraLogout - dataHoraAgora);
+
+                if (dataHoraAgora > dataHoraLogout + 2500) {
+                    window.clearInterval(timerLogout);
+                    document.location.reload();
+                }
+            }, 1000);
+        </script>
+    }
+</body>
+</html>

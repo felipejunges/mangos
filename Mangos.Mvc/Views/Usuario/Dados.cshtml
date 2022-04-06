@@ -1,0 +1,77 @@
+﻿@model Mangos.Mvc.Models.ViewModels.UsuarioDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro do usuário";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        @if (Model.Id != 0)
+        {
+            @Html.HiddenFor(o => o.GrupoId)
+        }
+        else
+        {
+            <div class="form-group row">
+                <label asp-for="GrupoId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+                <div class="col-md-6">
+                    <select asp-for="GrupoId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.Grupos, "Id", "Descricao", null))">
+                        <option value="">Nenhum</option>
+                    </select>
+                    <span asp-validation-for="GrupoId" class="text-danger"></span>
+                </div>
+            </div>
+        }
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Senha, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                @Html.PasswordFor(m => m.Senha, new { @class = "form-control form-control-sm" })
+                @Html.ValidationMessageFor(model => model.Senha, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Admin)
+                        @Html.DisplayNameFor(model => model.Admin)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Admin, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Ativo)
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Ativo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}

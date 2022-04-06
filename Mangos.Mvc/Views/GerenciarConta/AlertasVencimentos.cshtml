@@ -1,0 +1,62 @@
+﻿@model Mangos.Mvc.Models.GerenciarConta.GerenciarAlertasVencimentosModel
+
+@{
+    ViewData["SubTitle"] = "Alertas de vencimentos";
+    Layout = "~/Views/GerenciarConta/_LayoutGerenciar.cshtml";
+}
+
+<div class="card">
+    <h5 class="card-header">@ViewData["SubTitle"]</h5>
+    <div class="card-body">
+
+        <form method="post">
+            <div class="form-horizontal">
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.DiasAlertaVencimentos, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.DiasAlertaVencimentos, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.DiasAlertaVencimentos, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <select asp-for="TipoAlertaVencimentos" class="form-control form-control-sm" asp-items="@(new SelectList(Model.TiposAvisoVencimentosUsuario, "Key", "Value", Model.TipoAlertaVencimentos))">
+                        </select>
+                        <span asp-validation-for="TipoAlertaVencimentos" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.DiasEmailVencimentos, htmlAttributes: new { @class = "col-md-3 text-md-right col-form-label col-form-label-sm" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.DiasEmailVencimentos, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                        @Html.ValidationMessageFor(model => model.DiasEmailVencimentos, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <select asp-for="TipoEmailVencimentos" class="form-control form-control-sm" asp-items="@(new SelectList(Model.TiposEmailVencimentosUsuario, "Key", "Value", Model.TipoEmailVencimentos))">
+                        </select>
+                        <span asp-validation-for="TipoEmailVencimentos" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="offset-md-3 col-md-9">
+                        <input type="submit" value="Gravar" class="btn btn-primary btn-sm" /> ou @Html.ActionLink("Voltar", "Index", "Home")
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@if (Model.Sucesso)
+{
+    @section scripts_gerenciar {
+        <script type="text/javascript">
+            mensagemTopo(true, 'Os dados de usuário foram alterados com sucesso.');
+        </script>
+    }
+}

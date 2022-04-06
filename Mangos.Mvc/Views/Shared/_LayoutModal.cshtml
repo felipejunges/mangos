@@ -1,0 +1,46 @@
+﻿@{
+    bool bigModal = ViewData["BigModal"] != null && Convert.ToBoolean(ViewData["BigModal"]);
+    bool setaFormSubmit = ViewData["SetaFormSubmit"] == null || Convert.ToBoolean(ViewData["SetaFormSubmit"]);
+}
+
+<div class="modal-dialog modal-dialog-centered modal-@(bigModal ? "xl" : "lg")" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">@ViewData["Title"]</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @RenderBody()
+        </div>
+        <div class="modal-footer">
+            @if (setaFormSubmit)
+            {
+                <button id="btn-gravar" type="button" class="btn btn-primary btn-sm">Gravar</button>
+                <text>ou</text>
+            }
+            <close-modal-link>Fechar</close-modal-link>
+        </div>
+    </div>
+</div>
+
+@RenderSection("scripts", required: false)
+
+<script type="text/javascript">
+    setaCamposMascaras();
+
+    @if (setaFormSubmit) {
+        <text>
+        setaFormSubmit();
+    
+        var form = $('#modal-principal .modal-body').find('form[auto-submit!="false"]');
+        $('#btn-gravar').on('click', function (e) {
+            e.preventDefault();
+
+            if (form.length > 0)
+                $(form).submit();
+        });
+        </text>
+    }
+</script>

@@ -1,0 +1,194 @@
+﻿@model IEnumerable<Mangos.Dominio.Models.Relatorios.RelatorioCategoriaModel>
+
+@* ****** RECEITAS ***** *@
+@* ********************* *@
+
+<div class="table-responsive">
+    <table class="table table-xsm">
+        <tr>
+            @{
+                Dictionary<DateTime, decimal> dictTotaisReceitas = new Dictionary<DateTime, decimal>();
+                Dictionary<DateTime, decimal> dictTotaisDespesas = new Dictionary<DateTime, decimal>();
+                Dictionary<DateTime, decimal> dictTotaisGerais = new Dictionary<DateTime, decimal>();
+
+                DateTime mesInicial = (DateTime)ViewData["MesInicialDate"]!;
+                DateTime mesFinal = (DateTime)ViewData["MesFinalDate"]!;
+
+                int diffMonths = (((mesFinal.Year - mesInicial.Year) * 12) + mesFinal.Month - mesInicial.Month) + 4;
+                decimal width = 100M / diffMonths;
+                string strWidth = width.ToString("f2").Replace(',', '.');
+                string strWidthTitulo = (width * 2).ToString("f2").Replace(',', '.');
+            }
+
+            <th style="width: @(strWidthTitulo)%;">
+                @Html.DisplayNameFor(model => model.Categoria) (Receitas)
+            </th>
+
+            @for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+            {
+                <th style="text-align: right; width: @(strWidth)%">@mes.ToString("MMM/yyyy")</th>
+            }
+
+            <th style="width: @(strWidth)%; text-align: right;">
+                @Html.DisplayNameFor(model => model.ValorTotal)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Where(o => o.Tipo == Mangos.Dominio.Enums.TipoLancamento.Receita))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria)
+                </td>
+
+                @for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+                {
+                    decimal? valorMes = item.Valores.ContainsKey(mes) ? (decimal?)item.Valores[mes] : null;
+
+                    <td style="text-align: right;">
+                        @if (valorMes != null)
+                        {
+                            @Html.Raw(valorMes.Value.ToString("c2"));
+
+                            if (!dictTotaisReceitas.ContainsKey(mes)) { dictTotaisReceitas.Add(mes, valorMes.Value); }
+                            else { dictTotaisReceitas[mes] += valorMes.Value; }
+                            if (!dictTotaisGerais.ContainsKey(mes)) { dictTotaisGerais.Add(mes, valorMes.Value); }
+                            else { dictTotaisGerais[mes] += valorMes.Value; }
+                        }
+                    </td>
+                }
+
+                <td style="text-align: right;">
+                    @Html.Raw(item.ValorTotal.ToString("c2"))
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td style="font-weight: bold;">Total</td>
+
+            @{decimal somaValorTotalReceitas = 0;}
+
+            @for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+            {
+                <td style="text-align: right; font-weight: bold;">
+                    @if (dictTotaisReceitas.ContainsKey(mes))
+                    {
+                        @Html.Raw(dictTotaisReceitas[mes].ToString("c2"));
+
+                        somaValorTotalReceitas += dictTotaisReceitas[mes];
+                    }
+                </td>
+            }
+
+            <td style="text-align: right; font-weight: bold;">@somaValorTotalReceitas.ToString("c2")</td>
+        </tr>
+    </table>
+
+    <hr />
+
+    @* ****** DESPESAS ***** *@
+    @* ********************* *@
+
+    <table class="table table-xsm">
+        <tr>
+            <th style="width: @(strWidthTitulo)%;">
+                @Html.DisplayNameFor(model => model.Categoria) (Despesas)
+            </th>
+
+            @{
+                for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+                {
+                    <th style="text-align: right; width: @(strWidth)%">@mes.ToString("MMM/yyyy")</th>
+                }
+            }
+
+            <th style="width: @(strWidth)%; text-align: right;">
+                @Html.DisplayNameFor(model => model.ValorTotal)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Where(o => o.Tipo == Mangos.Dominio.Enums.TipoLancamento.Despesa))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria)
+                </td>
+
+                @for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+                {
+                    decimal? valorMes = item.Valores.ContainsKey(mes) ? (decimal?)item.Valores[mes] : null;
+
+                    <td style="text-align: right;">
+                        @if (valorMes != null)
+                        {
+                            @Html.Raw(valorMes.Value.ToString("c2"));
+
+                            if (!dictTotaisDespesas.ContainsKey(mes)) { dictTotaisDespesas.Add(mes, valorMes.Value * -1); }
+                            else { dictTotaisDespesas[mes] -= valorMes.Value; }
+                            if (!dictTotaisGerais.ContainsKey(mes)) { dictTotaisGerais.Add(mes, valorMes.Value * -1); }
+                            else { dictTotaisGerais[mes] -= valorMes.Value; }
+                        }
+                    </td>
+                }
+
+                <td style="text-align: right;">
+                    @Html.Raw(item.ValorTotal.ToString("c2"))
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td style="font-weight: bold;">Total</td>
+
+            @{decimal somaValorTotalDespesas = 0;}
+
+            @for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+            {
+                <td style="text-align: right; font-weight: bold;">
+                    @if (dictTotaisDespesas.ContainsKey(mes))
+                    {
+                        @Html.Raw((dictTotaisDespesas[mes] * -1).ToString("c2"));
+
+                        somaValorTotalDespesas += dictTotaisDespesas[mes];
+                    }
+                </td>
+            }
+
+            <td style="text-align: right; font-weight: bold;">@((somaValorTotalDespesas * -1).ToString("c2"))</td>
+        </tr>
+    </table>
+
+    <hr />
+
+    @* ****** TOTAIS ***** *@
+    @* ********************* *@
+
+    <table class="table table-xsm">
+        <tr>
+            <th style="width: @(strWidthTitulo)%;">
+                Totais gerais
+            </th>
+
+            @{
+                decimal somaTotalGeral = 0;
+
+                for (DateTime mes = mesInicial; mes <= mesFinal; mes = mes.AddMonths(1))
+                {
+                    <th style="text-align: right; width: @(strWidth)%">
+                        @if (dictTotaisGerais.ContainsKey(mes))
+                        {
+                            @Html.Raw(dictTotaisGerais[mes].ToString("c2"));
+
+                            somaTotalGeral += dictTotaisGerais[mes];
+                        }
+                    </th>
+                }
+            }
+
+            <th style="width: @(strWidth)%; text-align: right;">
+                @Html.Raw(somaTotalGeral.ToString("c2"))
+            </th>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Mangos.Dominio.Models.Relatorios.ItemRelatorioBurnupModel>
+
+@{
+    ViewData["Title"] = "Gráfico de burnup da meta";
+    ViewData["BigModal"] = false;
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+<div class="form-horizontal">
+    <canvas id="burnupChart"></canvas>
+</div>
+
+@section scripts {
+
+    <script src="~/lib/chartjs/Chart.bundle.min.js"></script>
+    <script src="~/lib/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
+    <script src="~/js/Chart.js"></script>
+
+    <script type="text/javascript">
+        preencheChart('burnupChart',
+                [@Html.Raw(string.Join(",", Model.Select(o => Html.Raw($"'{o.Legenda}'"))))],
+                [@string.Join(",", Model.Select(o => o.ValorProjecao.ToString().Replace(',', '.')))],
+                [@string.Join(",", Model.Select(o => o.ValorRealizacao.ToString().Replace(',', '.')))],
+                "@DateTime.Now.ToString("MMM/yyyy")");
+    </script>
+}

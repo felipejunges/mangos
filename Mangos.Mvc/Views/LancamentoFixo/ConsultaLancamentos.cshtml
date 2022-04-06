@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Mangos.Dominio.Models.LancamentoGeradoLancamentoFixoModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+
+    ViewData["BigModal"] = true;
+    ViewData["SetaFormSubmit"] = false;
+    ViewData["Title"] = "Consulta de lançamentos gerados pelo lançamento fixo";
+}
+
+
+<nav class="navbar navbar-default navbar-sm">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <nav-bar-title id-dom-expandir="bs-navbar-collapse-1"></nav-bar-title>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <form asp-action="ConsultaLancamentosLista" asp-controller="LancamentoFixo" id="form-busca-modal" method="GET" data-ajax="true" data-ajax-update="#listaAjaxModal" class="navbar-form navbar-left">
+                <input type="hidden" id="LancamentoFixoId" name="LancamentoFixoId" value="@ViewData["LancamentoFixoId"]" />
+                <button type="submit" class="btn btn-default btn-sm">Procurar</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div id="listaAjaxModal">
+    @await Html.PartialAsync("ConsultaLancamentosLista", Model)
+</div>

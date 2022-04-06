@@ -1,0 +1,123 @@
+﻿@model Mangos.Dominio.Models.Relatorios.RelatorioExtratoContaModel
+
+<div class="table-responsive">
+    <table class="table table-borderless table-sm">
+        <tr class="thead-light">
+            <th>
+                @Html.DisplayNameFor(model => model.Itens.FirstOrDefault()!.DataContaBancaria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Itens.FirstOrDefault()!.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Itens.FirstOrDefault()!.Pessoa)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.Itens.FirstOrDefault()!.Valor)
+            </th>
+        </tr>
+
+        @{
+            decimal valorReceitas = 0;
+            decimal valorDespesas = 0;
+            decimal valorDiario = 0;
+            DateTime dataTemp = DateTime.MinValue;
+        }
+
+        @if (Model.Itens.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    @ViewData["MensagemEmpty"]
+                </td>
+            </tr>
+        }
+        else
+        {
+            var estiloTr = string.Empty;
+
+            for (int i = 0; i < Model.Itens.Count(); i++)
+            {
+                var item = Model.Itens.ElementAt(i);
+
+                if (item.Tipo == Mangos.Dominio.Enums.TipoLancamento.Receita) { valorReceitas += item.Valor; valorDiario += item.Valor; }
+                else if (item.Tipo == Mangos.Dominio.Enums.TipoLancamento.Despesa) { valorDespesas += item.Valor; valorDiario -= item.Valor; }
+
+                @if (dataTemp != item.DataContaBancaria)
+                {
+                    estiloTr = estiloTr == "tr-impar" ? "tr-par" : "tr-impar";
+                }
+
+                <tr class="@estiloTr @(dataTemp != item.DataContaBancaria ? "relatorio-extrato-dia" : "")">
+                    <td>
+                        @if (dataTemp != item.DataContaBancaria)
+                        {
+                            @Html.DisplayFor(modelItem => item.DataContaBancaria);
+
+                            dataTemp = item.DataContaBancaria;
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+
+                        @if (item.DataContaBancaria != item.DataPagamento)
+                        {
+                            <text>[</text>
+                            @Html.DisplayFor(modelItem => item.DataPagamento);
+                            <text>]</text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pessoa)
+                    </td>
+                    <td class="text-right" style="color: @(item.Tipo == Mangos.Dominio.Enums.TipoLancamento.Receita ? "#00AA00" : item.Tipo == Mangos.Dominio.Enums.TipoLancamento.Despesa ? "#BB0000" : "");">
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                </tr>
+
+                if (Convert.ToBoolean(ViewData["ExibirTotais"]) && (i == Model.Itens.Count() - 1 || Model.Itens.ElementAt(i + 1).DataContaBancaria != item.DataContaBancaria))
+                {
+                    decimal valorItemDiario = valorDiario >= 0 ? valorDiario : valorDiario * -1;
+                    string corItemDiario = valorDiario >= 0 ? "#00AA00" : "#BB0000";
+
+                    <tr class="@estiloTr">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" style="font-weight: 600;">Total em @(item.DataContaBancaria.ToString("dd/MM/yyyy")): <span style="margin-left: 20px; color: @(corItemDiario);">@valorItemDiario.ToString("c2")</span></td>
+                    </tr>
+
+                    valorDiario = 0;
+                }
+            }
+        }
+    </table>
+
+    <hr />
+
+    <table class="table table-striped table-sm">
+        @{
+            decimal valorTotal = Model.ValorSaldoInicial + valorReceitas - valorDespesas;
+        }
+        <tr>
+            <th>Totais</th>
+            <th style="text-align: right;">Valor</th>
+        </tr>
+        <tr>
+            <td>Saldo inicial</td>
+            <td style="text-align: right; color: @(Model.ValorSaldoInicial >= 0 ? "#00AA00" : "#BB0000");">@(Model.ValorSaldoInicial.ToString("c2"))</td>
+        </tr>
+        <tr>
+            <td>Receitas</td>
+            <td style="text-align: right; color: #00AA00;">@(valorReceitas.ToString("c2"))</td>
+        </tr>
+        <tr>
+            <td>Despesas</td>
+            <td style="text-align: right; color: #BB0000;">@(valorDespesas.ToString("c2"))</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td style="text-align: right; color: #0000AA;">@(valorTotal.ToString("c2"))</td>
+        </tr>
+    </table>
+</div>

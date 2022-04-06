@@ -1,0 +1,52 @@
+﻿@model Mangos.Mvc.Models.ViewModels.LogConsultaModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Consulta do log";
+    ViewData["SetaFormSubmit"] = false;
+}
+
+<div class="form-horizontal">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group row">
+        <label asp-for="DataHora" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-3">
+            <input asp-for="DataHora" class="form-control form-control-sm" readonly="readonly" />
+        </div>
+
+        <label asp-for="LogLevel" class="col-md-1 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-3">
+            <input asp-for="LogLevel" class="form-control form-control-sm" readonly="readonly" />
+        </div>
+
+        <label asp-for="Aplicacao" class="col-md-1 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-2">
+            <input asp-for="Aplicacao" class="form-control form-control-sm" readonly="readonly" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="CategoryName" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-10">
+            <input asp-for="CategoryName" class="form-control form-control-sm" readonly="readonly" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Mensagem" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-10">
+            <textarea asp-for="Mensagem" class="form-control form-control-sm campo-observacoes-maior"
+                readonly="readonly"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Exception" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+        <div class="col-md-10">
+            <textarea asp-for="Exception" class="form-control form-control-sm campo-observacoes-maior"
+                readonly="readonly"></textarea>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,92 @@
+﻿@model Mangos.Mvc.Models.ViewModels.ContaBancariaDadosModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Cadastro da conta bancária";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.GrupoId)
+        @Html.HiddenFor(model => model.Hash)
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.NumeroBanco, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NumeroBanco, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.NumeroBanco, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.Agencia, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Agencia, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Agencia, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.NumeroConta, htmlAttributes: new { @class = "col-md-1 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.NumeroConta, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.NumeroConta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.SaldoInicial, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.SaldoInicial, new { htmlAttributes = new { @class = "form-control form-control-sm campoValor" } })
+                @Html.ValidationMessageFor(model => model.SaldoInicial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="CategoriaRendimentoMensalId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaRendimentoMensalId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.CategoriasRendimentoMensal, "Id", "DescricaoComSuperior", null))">
+                    <option value="">Nenhum</option>
+                </select>
+                <span asp-validation-for="CategoriaRendimentoMensalId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.PularFinaisSemanaLancamentoRapido)
+                        @Html.DisplayNameFor(model => model.PularFinaisSemanaLancamentoRapido)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.PularFinaisSemanaLancamentoRapido, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.RelatorioProjecaoSaldo)
+                        @Html.DisplayNameFor(model => model.RelatorioProjecaoSaldo)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.RelatorioProjecaoSaldo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Ativo)
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Ativo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}

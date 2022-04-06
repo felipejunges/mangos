@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.LancamentoListaModel>
+
+@{
+    ViewData["Title"] = "Cadastro de receitas - agrupadas";
+}
+
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+    <div class="p-2 bd-highlight margin-auto">
+        <div class="btn-group bootstrap-navbar-btn-group">
+            <a class="btn-sm btn-light btn" href="@Url.Content("~/Receita")" role="button">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<nav class="borda-conteudo">
+    <div class="titulo-filtro">
+        <span class="fa fa-search" aria-hidden="true"></span> Pesquisa
+    </div>
+
+    <form asp-action="AgrupadasLista" asp-controller="Receita" id="form-busca" method="get" data-ajax="true" data-ajax-update="#listaAjax" class="navbar-form navbar-left">
+
+        <input type="hidden" id="Agrupador" name="Agrupador" value="@ViewData["Agrupador"]" />
+
+        <div class="form-group offset-md-1">
+            <button type="submit" class="btn btn-info btn-sm" glyph-icon="search">Procurar</button>
+        </div>
+    </form>
+</nav>
+
+<div id="listaAjax" class="borda-conteudo">
+    @await Html.PartialAsync("AgrupadasLista", Model)
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        jQuery('#Busca_TipoPesquisa').on('change', function (e) {
+            jQuery('#Busca_Pesquisa').attr('placeholder', jQuery('#Busca_TipoPesquisa option:selected').text());
+        });
+    </script>
+}

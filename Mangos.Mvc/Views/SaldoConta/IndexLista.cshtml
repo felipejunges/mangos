@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.SaldoContaBancariaListaModel>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ContaBancaria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UltimaConferenciaSaldo)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorMovimentacoes)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorSaldo)
+            </th>
+            <th></th>
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class="text-center">Nenhum resultado encontrado</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContaBancaria)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UltimaConferenciaSaldo)
+                        @if (!item.SaldoAtualizado)
+                        {
+                            <span class="badge badge-info">Pendente</span>
+                        }
+                        else if (!item.Fechado && item.PodeFechar)
+                        {
+                            <span class="badge badge-info">Fechar</span>
+                        }
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorMovimentacoes)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorSaldo)
+                    </td>
+                    <td class="text-right">
+                        @if (!item.Fechado)
+                        {
+                            if (item.PodeFechar)
+                            {
+                                <execute-action-icon controller="SaldoConta" action="Fechar" value="@item.Id.ToString()" glyph-icon="lock" confirmation-message="Confirma fechar o registro?"></execute-action-icon>
+                            }
+
+                            <execute-action-icon controller="SaldoConta" action="SetarDataHoraConferenciaSaldo" value="@item.Id.ToString()" glyph-icon="check" confirmation-message="Confirma conferir o registro?"></execute-action-icon>
+                        }
+                        else
+                        {
+                            <execute-action-icon controller="SaldoConta" action="Reabrir" value="@item.Id.ToString()" glyph-icon="lock-open" confirmation-message="Confirma reabrir o fechamento do registro?"></execute-action-icon>
+                        }
+
+                        <a href="@Url.Content("~/RelatorioExtratoConta?Conta=" + item.ContaBancariaId.ToString() + "&Data=" + item.Data.ToString("yyyyMM"))" target="_blank" glyph-icon="list-alt"></a>
+                    </td>
+                </tr>
+            }
+        }
+
+        <tr class="table-footer">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right">@((Model.Sum(s => s.ValorMovimentacoes)).ToString("c2"))</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>

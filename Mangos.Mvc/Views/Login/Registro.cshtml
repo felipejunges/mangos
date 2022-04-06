@@ -1,0 +1,79 @@
+﻿@model Mangos.Mvc.Models.ViewModels.UsuarioInclusaoModel
+
+@{
+    ViewData["Title"] = "Cadastro de usuário";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/login.css" />
+}
+
+<main class="login-form">
+    <div class="cotainer">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Cadastrar novo usuário</div>
+                    <div class="card-body">
+                        <form id="formRegistro" method="POST" action="@Url.Content("~/Login/Registro")" novalidate="novalidate">
+                            @Html.AntiForgeryToken()
+
+                            @if (ViewData.ModelState.Any(x => x.Value!.Errors.Any()))
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="div-erro">
+                                    <strong>Erro no cadastro</strong>
+
+                                    @foreach (var modelError in Html.ViewData.ModelState.SelectMany(keyValuePair => keyValuePair.Value!.Errors))
+                                    {
+                                        <br />@modelError.ErrorMessage
+                                    }
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+
+                            <div class="form-group">
+                                <label for="Email" class="control-label">@Html.DisplayNameFor(o => o.Email)</label>
+                                <input type="text" class="form-control" id="Email" name="Email" value="@(Model != null ? Model.Email : "")" required="" title="Informe seu e-mail" placeholder="exemplo@gmail.com" autofocus>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="ConfirmeEmail" class="control-label">@Html.DisplayNameFor(o => o.ConfirmeEmail)</label>
+                                <input type="text" class="form-control" id="ConfirmeEmail" name="ConfirmeEmail" value="@(Model != null ? Model.ConfirmeEmail : "")" required="" title="Confirme seu e-mail" placeholder="exemplo@gmail.com">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Nome" class="control-label">@Html.DisplayNameFor(o => o.Nome)</label>
+                                <input type="text" class="form-control" id="Nome" name="Nome" value="@(Model != null ? Model.Nome : "")" required="" title="Informe seu nome">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Senha" class="control-label">@Html.DisplayNameFor(o => o.Senha)</label>
+                                <input type="password" class="form-control" id="Senha" name="Senha" value="@(Model != null ? Model.Senha : "")" required="" title="Informe sua senha">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="ConfirmeSenha" class="control-label">@Html.DisplayNameFor(o => o.ConfirmeSenha)</label>
+                                <input type="password" class="form-control" id="ConfirmeSenha" name="ConfirmeSenha" value="@(Model != null ? Model.ConfirmeSenha : "")" required="" title="Confirme sua senha">
+                                <span class="help-block"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button> ou @Html.ActionLink("Voltar", "Login", "Login")
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section scripts {
+    <script type="text/javascript">
+        $('#formRegistro').on('submit', function () {
+            $(this).find('button[type="submit"]').attr('disabled', true);
+            $(this).find('button[type="submit"]').html('Aguarde...');
+            $('#div-erro').hide();
+        });
+    </script>
+}

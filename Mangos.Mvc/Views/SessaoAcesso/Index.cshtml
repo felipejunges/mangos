@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Mangos.Mvc.Models.ViewModels.SessaoAcessoListaModel>
+
+@{
+    ViewData["Title"] = "Sessões de acesso ao sistema";
+}
+
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+</div>
+
+<nav class="borda-conteudo">
+    <div class="titulo-filtro">
+        <span class="fa fa-search" aria-hidden="true"></span> Pesquisa
+    </div>
+
+    <form asp-action="IndexLista" asp-controller="SessaoAcesso" id="form-busca" method="get" data-ajax="true" data-ajax-update="#listaAjax" class="navbar-form navbar-left">
+        <div class="form-group row">
+            <label for="Busca_DataInicial" class="col-md-1 text-md-right col-form-label col-form-label-sm">Período</label>
+            <div class="input-daterange input-group input-group-sm col-md-3" id="datepicker">
+                <input type="text" class="form-control form-control-sm campoData" name="dataInicial" id="Busca_DataInicial" value="@ViewData["DataInicial"]" />
+                <div class="input-group-append input-group-prepend">
+                    <span class="input-group-text">até</span>
+                </div>
+                <input type="text" class="form-control form-control-sm campoData" name="dataFinal" value="@ViewData["DataFinal"]" />
+            </div>
+        </div>
+
+        <div class="form-group form-check form-control-sm offset-md-1">
+            <input type="checkbox" class="form-check-input" id="buscarSessoesDeslogadas" name="buscarSessoesDeslogadas" value="true">
+            <label class="form-check-label" for="buscarSessoesDeslogadas">Buscar sessões deslogadas</label>
+        </div>
+
+        <div class="form-group offset-md-1">
+            <button type="submit" class="btn btn-info btn-sm" glyph-icon="search">Procurar</button>
+        </div>
+    </form>
+</nav>
+
+<div id="listaAjax" class="borda-conteudo">
+    @await Html.PartialAsync("IndexLista", Model)
+</div>

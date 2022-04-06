@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Mangos.Dominio.Models.Relatorios.RelatorioProjecaoRealizacaoModel>
+
+<div class="table-responsive">
+    <table class="table table-sm">
+        <tr class="thead-light">
+            <th>
+                @Html.DisplayNameFor(model => model.Mes)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorReceitasProjecao)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorDespesasProjecao)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorReceitasRealizacao)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorDespesasRealizacao)
+            </th>
+            <th class="text-right">
+                @Html.DisplayNameFor(model => model.ValorTotal)
+            </th>
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class="text-center">Nenhum resultado encontrado</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr style="@(item.Mes == new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1) ? "font-weight: bold;" : "")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mes)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorReceitasProjecao)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorDespesasProjecao)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorReceitasRealizacao)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.ValorDespesasRealizacao)
+                    </td>
+                    <td class="text-right" style="font-weight: bold;">
+                        @Html.DisplayFor(modelItem => item.ValorTotal)
+                    </td>
+                </tr>
+            }
+        }
+
+        <tr class="table-footer">
+            <td></td>
+            <td class="text-right">@(Model.Sum(s => s.ValorReceitasProjecao).ToString("c2"))</td>
+            <td class="text-right">@(Model.Sum(s => s.ValorDespesasProjecao).ToString("c2"))</td>
+            <td class="text-right">@(Model.Sum(s => s.ValorReceitasRealizacao).ToString("c2"))</td>
+            <td class="text-right">@(Model.Sum(s => s.ValorDespesasRealizacao).ToString("c2"))</td>
+            <td class="text-right">@(Model.Sum(s => s.ValorTotal).ToString("c2"))</td>
+        </tr>
+
+    </table>
+</div>

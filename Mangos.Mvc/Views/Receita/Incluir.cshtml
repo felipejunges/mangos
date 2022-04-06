@@ -1,0 +1,197 @@
+﻿@model Mangos.Mvc.Models.ViewModels.LancamentoInclusaoModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    ViewData["Title"] = "Incluir receita";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.GrupoId)
+    @Html.HiddenFor(model => model.PessoaId)
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control form-control-sm campoValor" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.DataVencimento, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DataVencimento, new { htmlAttributes = new { @class = "form-control form-control-sm campoData" } })
+                @Html.ValidationMessageFor(model => model.DataVencimento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.Label("Pessoa", "Pessoa", new { @for = "ProcuraPessoa", @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Pessoa, new { htmlAttributes = new { id = "ProcuraPessoa", @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.PessoaId, "", new { @class = "text-danger" })
+            </div>
+
+            <label asp-for="CategoriaId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="CategoriaId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.Categorias, "Id", "Descricao", null))">
+                    <option value="">Nenhuma</option>
+                </select>
+                <span asp-validation-for="CategoriaId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Observacoes, new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Observacoes, new { htmlAttributes = new { @class = "form-control form-control-sm campo-observacoes" } })
+                @Html.ValidationMessageFor(model => model.Observacoes, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Pago)
+                        @Html.DisplayNameFor(model => model.Pago)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Pago, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row campos-pagamento" style="@(!Model.Pago ? "display: none" : "")">
+            @Html.LabelFor(model => model.DataPagamento, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DataPagamento, new { htmlAttributes = new { @class = "form-control form-control-sm campoData" } })
+                @Html.ValidationMessageFor(model => model.DataPagamento, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.ValorPago, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ValorPago, new { htmlAttributes = new { @class = "form-control form-control-sm campoValor" } })
+                @Html.ValidationMessageFor(model => model.ValorPago, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row campos-pagamento" style="@(!Model.Pago ? "display: none" : "")">
+            @Html.LabelFor(model => model.DataContaBancaria, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DataContaBancaria, new { htmlAttributes = new { @class = "form-control form-control-sm campoData" } })
+                @Html.ValidationMessageFor(model => model.DataContaBancaria, "", new { @class = "text-danger" })
+            </div>
+
+            <label asp-for="ContaBancariaId" class="col-md-2 text-md-right col-form-label col-form-label-sm"></label>
+            <div class="col-md-4">
+                <select asp-for="ContaBancariaId" class="form-control form-control-sm" asp-items="@(new SelectList(Model.ContasBancarias, "Id", "Descricao", null))">
+                    <option value="">Nenhuma</option>
+                </select>
+                <span asp-validation-for="ContaBancariaId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6 offset-md-2">
+                <div class="checkbox">
+                    <label class="col-form-label-sm">
+                        @Html.EditorFor(model => model.Parcelado)
+                        @Html.DisplayNameFor(model => model.Parcelado)
+                    </label>
+                    @Html.ValidationMessageFor(model => model.Parcelado, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row campos-parcelado" style="@(!Model.Parcelado ? "display: none" : "")">
+            @Html.LabelFor(model => model.NumeroParcelas, htmlAttributes: new { @class = "col-md-2 text-md-right col-form-label col-form-label-sm" })
+
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NumeroParcelas, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                @Html.ValidationMessageFor(model => model.NumeroParcelas, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.TipoParcelamento, Mangos.Dominio.Enums.TipoParcelamentoLancamento.Parcelar, new { @class = "form-check-input", @id = "TipoParcelamento_Parcelar" })
+                    <label class="form-check-label col-form-label-sm" for="TipoParcelamento_Parcelar">Parcelar</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(model => model.TipoParcelamento, Mangos.Dominio.Enums.TipoParcelamentoLancamento.Replicar, new { @class = "form-check-input", @id = "TipoParcelamento_Replicar" })
+                    <label class="form-check-label col-form-label-sm" for="TipoParcelamento_Replicar">Replicar</label>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#Pago').on('click', function (e) {
+                if (jQuery(this).is(':checked')) {
+                    jQuery('.campos-pagamento').show();
+
+                    if (jQuery("#ValorPago").val() == "")
+                        jQuery("#ValorPago").val(jQuery("#Valor").val());
+                    if (jQuery("#DataPagamento").val() == "")
+                        jQuery("#DataPagamento").datepicker('update', jQuery("#DataVencimento").val());
+                } else {
+                    jQuery('.campos-pagamento').hide();
+                }
+
+                refreshModal();
+            });
+
+            jQuery('#Parcelado').on('click', function (e) {
+                if (jQuery(this).is(':checked'))
+                    jQuery('.campos-parcelado').show();
+                else
+                    jQuery('.campos-parcelado').hide();
+
+                refreshModal();
+            });
+
+            //
+            var url = fullUrl + "Pessoa/BuscaPessoas";
+
+            jQuery('#ProcuraPessoa').autocomplete({
+                serviceUrl: url,
+                paramName: 'busca',
+                minChars: 3,
+                lookupLimit: 20,
+                deferRequestBy: 250,
+                zIndex: 10001,
+                params: { tipo: 'C' },
+                showNoSuggestionNotice: true,
+                noSuggestionNotice: 'Nenhum resultado encontrado',
+                onSelect: function (suggestion) {
+                    $('#PessoaId').val(suggestion.data.pessoaId);
+
+                    if (suggestion.data.categoriaId != null && $("#CategoriaId:has(option[value='" + suggestion.data.categoriaId + "'])").length > 0)
+                        $('#CategoriaId').val(suggestion.data.categoriaId);
+                },
+                onInvalidateSelection: function () {
+                    $('#PessoaId').val('');
+                },
+                onHide: function (container) {
+                    if ($('#PessoaId').val() == '')
+                        jQuery('#ProcuraPessoa').val('');
+                }
+            });
+
+        });
+    </script>
+}
